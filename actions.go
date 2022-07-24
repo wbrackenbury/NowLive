@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"os"
 	"net/http"
 	"net/url"
@@ -79,12 +80,16 @@ func Send(num, message string) (*http.Response, error) {
 	v.Set("Body", message)
 	rb := *strings.NewReader(v.Encode())
 
+	fmt.Printf("Rb: %s\n", v)
+	fmt.Printf("Send URL: %s\n", sendUrl(tf))
 
 	req, err := http.NewRequest("POST", sendUrl(tf), &rb)
 	if err != nil {
 		return nil, err
 	}
 	decorateReq(req, tf)
+
+	fmt.Printf("Down to here\n")
 
 	client := &http.Client{}
 	resp, err := client.Do(req)
