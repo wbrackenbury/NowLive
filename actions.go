@@ -81,7 +81,6 @@ func Send(num, message string) (*http.Response, error) {
 	rb := *strings.NewReader(v.Encode())
 
 	fmt.Printf("Rb: %s\n", v)
-	fmt.Printf("Send URL: %s\n", sendUrl(tf))
 
 	req, err := http.NewRequest("POST", sendUrl(tf), &rb)
 	if err != nil {
@@ -89,11 +88,10 @@ func Send(num, message string) (*http.Response, error) {
 	}
 	decorateReq(req, tf)
 
-	fmt.Printf("Down to here\n")
-	fmt.Printf("%s\n", req)
-
 	client := &http.Client{}
 	resp, err := client.Do(req)
+
+	fmt.Println(resp)
 
 	return resp, err
 
