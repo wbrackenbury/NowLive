@@ -44,6 +44,6 @@ func pgConn() (*gorm.DB, error){
 
 func Conn() (*gorm.DB, error) {
 
-	return pgConn()
-	//return sqliteConn()
+	//return pgConn()
+	return sqliteConn()
 }
