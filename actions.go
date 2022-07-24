@@ -92,6 +92,8 @@ func Send(num, message string) (*http.Response, error) {
 	resp, err := client.Do(req)
 
 	fmt.Println(resp)
+	fmt.Println(resp.Status)
+	fmt.Println(resp.Body)
 
 	return resp, err
 
