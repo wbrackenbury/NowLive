@@ -75,7 +75,7 @@ func Send(num, message string) (*http.Response, error) {
 	}
 
 	v := url.Values{}
-	v.Set("T", num)
+	v.Set("To", num)
 	v.Set("From", tf.TwilPhone)
 	v.Set("Body", message)
 	rb := *strings.NewReader(v.Encode())
@@ -87,6 +87,8 @@ func Send(num, message string) (*http.Response, error) {
 		return nil, err
 	}
 	decorateReq(req, tf)
+
+	fmt.Printf("%s", req)
 
 	client := &http.Client{}
 	resp, err := client.Do(req)
