@@ -8,22 +8,25 @@ func hasCredits(uid string, credit_val uint64, credit_type uint8) (bool) {
 		panic(err)
 	}
 
-	var u User
+	var u[] User
 	db.Where("id = ?", uid).Find(&u)
 
-	if u == nil {
+	if len(u) == 0 {
 		panic("No user with id")
 	}
 
 
+	var valid bool
+
 	switch credit_type {
 	case PREVIEW:
-		return u.PreviewCredits >= credit_val
+		valid = u[0].PreviewCredits >= credit_val
 	case WEEKEND:
-		return u.WeekendCredits >= credit_val
+		valid = u[0].WeekendCredits >= credit_val
 	case WEEKDAY:
-		return u.WeekdayCredits >= credit_val
+		valid = u[0].WeekdayCredits >= credit_val
 	}
 
+	return valid
 
 }

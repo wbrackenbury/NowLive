@@ -1,6 +1,7 @@
 package main
 
 import (
+	"os"
 	"fmt"
 	"net/http"
 
@@ -23,23 +24,23 @@ func initDb() {
 }
 
 
-func exampData() (error) {
+func exampData() {
 
 	db, err := data.Conn()
 	if err != nil {
 		panic("Couldn't connect to DB")
 	}
 
-	var users []File
+	var users []data.User
 	db.Find(&users)
 
 	if len(users) > 0 {
-		return nil
+		return
 	}
 
-	uid := GetUUID()
+	uid := data.GetUUID()
 
-	u := User{
+	u := data.User{
 		Id: uid,
 
 		Name: "Ama Threeple",
@@ -51,22 +52,22 @@ func exampData() (error) {
 
 	db.Create(&u)
 
-	sid := GetUUID()
+	sid := data.GetUUID()
 
-	s := Show{
+	s := data.Show{
 		Id: sid,
 
 		Name: "Three Sisters",
 		PreviewPrice: 25.00,
 		WeekendPrice: 50.00,
-		WeekDayPrice: 40.00,
+		WeekdayPrice: 40.00,
 	}
 
 	db.Create(&s)
 
-	tid := GetUUID()
+	tid := data.GetUUID()
 
-	t := Transact{
+	t := data.Transact{
 		Id: tid,
 
 		Quantity: 2,
@@ -78,8 +79,8 @@ func exampData() (error) {
 
 	db.Create(&t)
 
-	a1 := Adjustment{
-		Id: GetUUID(),
+	a1 := data.Adjustment{
+		Id: data.GetUUID(),
 
 		DiscountCode: "SIBLING10",
 
@@ -89,8 +90,8 @@ func exampData() (error) {
 
 	db.Create(&a1)
 
-	a2 := Adjustment{
-		Id: GetUUID(),
+	a2 := data.Adjustment{
+		Id: data.GetUUID(),
 
 		DiscountCode: "MOSCOW2",
 
@@ -100,10 +101,10 @@ func exampData() (error) {
 
 	db.Create(&a2)
 
-	tid2 := GetUUID()
+	tid2 := data.GetUUID()
 
-	t2 := Transact{
-		Id: tid,
+	t2 := data.Transact{
+		Id: tid2,
 
 		Credit: 5,
 		CreditType: data.WEEKEND,
@@ -134,6 +135,13 @@ func main() {
 	mux.HandleFunc("/", home)
 	//mux.HandleFunc("/", home)
 
-	http.ListenAndServe(":8080",mux)
+	port := os.Getenv("PORT")
+	if (port == "") {
+		port = "8080"
+	}
+
+	portstr := fmt.Sprintf(":%s", port)
+
+	http.ListenAndServe(portstr,mux)
 
 }
