@@ -124,6 +124,22 @@ func home(w http.ResponseWriter, r * http.Request) {
 }
 
 
+func HelloWord(w http.ResponseWriter, r * http.Request) {
+
+	phone_l := r.URL.Query()["phone"]
+
+	var phone string
+	if len(phone) < 1 {
+		phone = "+1***REMOVED***"
+	} else {
+		phone = phone_l[0]
+	}
+
+	SendHello(phone)
+
+}
+
+
 
 func main() {
 
@@ -133,7 +149,7 @@ func main() {
 	mux := http.NewServeMux()
 
 	mux.HandleFunc("/", home)
-	//mux.HandleFunc("/", home)
+	mux.HandleFunc("/hello", HelloWord)
 
 	port := os.Getenv("PORT")
 	if (port == "") {
