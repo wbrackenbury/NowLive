@@ -135,7 +135,13 @@ func HelloWord(w http.ResponseWriter, r * http.Request) {
 		phone = phone_l[0]
 	}
 
-	SendHello(phone)
+	fmt.Printf("Making it here! Number: %s", phone)
+
+	err := SendHello(phone)
+
+	if err != nil {
+		panic(err)
+	}
 
 }
 
