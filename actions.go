@@ -57,9 +57,9 @@ func loadTwilInfo() (*TwilInfo, error) {
 
 func decorateReq(req *http.Request, tf *TwilInfo) {
 
-	req.SetBasicAuth(tf.AccountSid, tf.AuthToken)
-	req.Header.Add("Accept", "application/json")
-	req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
+	(*req).SetBasicAuth(tf.AccountSid, tf.AuthToken)
+	(*req).Header.Add("Accept", "application/json")
+	(*req).Header.Add("Content-Type", "application/x-www-form-urlencoded")
 
 }
 
@@ -90,6 +90,7 @@ func Send(num, message string) (*http.Response, error) {
 	decorateReq(req, tf)
 
 	fmt.Printf("Down to here\n")
+	fmt.Printf("%s\n", req)
 
 	client := &http.Client{}
 	resp, err := client.Do(req)
