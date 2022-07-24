@@ -93,7 +93,6 @@ func Send(num, message string) (*http.Response, error) {
 
 	fmt.Println(resp)
 	fmt.Println(resp.Status)
-	fmt.Println(resp.Body)
 
 	return resp, err
 
