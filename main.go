@@ -129,7 +129,7 @@ func HelloWord(w http.ResponseWriter, r * http.Request) {
 	phone_l := r.URL.Query()["phone"]
 
 	var phone string
-	if len(phone) < 1 {
+	if len(phone_l) < 1 {
 		phone = "+1***REMOVED***"
 	} else {
 		phone = phone_l[0]
