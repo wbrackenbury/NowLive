@@ -2,6 +2,7 @@ package data
 
 import (
 
+	//"database/sql"
 	"os"
 
 	"gorm.io/gorm"
@@ -32,14 +33,8 @@ func sqliteConn() (*gorm.DB, error){
 func pgConn() (*gorm.DB, error){
 
 
-	// conf_info, err := loadDbInfo()
-	// if err != nil {
-	// 	panic(err)
-	// }
-
-	s := dsnString(conf_info)
-	db, err := gorm.Open(sql.Open("postgres", os.Getenv("DATABASE_URL")), &gorm.Config{})
-	//db, err := gorm.Open(postgres.Open(s), &gorm.Config{})
+	//db, err := gorm.Open(sql.Open("postgres", os.Getenv("DATABASE_URL")), &gorm.Config{})
+	db, err := gorm.Open(postgres.Open(os.Getenv("DATABASE_URL")), &gorm.Config{})
 	if err != nil {
 		panic(err)
 	}
