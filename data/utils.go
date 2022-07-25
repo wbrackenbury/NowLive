@@ -97,7 +97,7 @@ func ExampData() {
 	sid := GetUUID()
 
 	start, _ := time.Parse("01-02-06", "3-05-22")
-	end, _ := time.Parse("01-02-06", "11-21-21")
+	end, _ := time.Parse("01-02-06", "11-21-22")
 
 	s := Show{
 		Id: sid,

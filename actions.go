@@ -144,6 +144,8 @@ func handleRunShows() (string, error) {
 
 	shows := data.RunningShows()
 
+	fmt.Println(shows)
+
 	if len(shows) < 1 {
 		return "No shows are currently playing.", nil
 	}
@@ -153,6 +155,8 @@ func handleRunShows() (string, error) {
 	for _, s := range shows {
 		ret_str += s
 	}
+
+	fmt.Println(ret_str)
 
 	return ret_str, nil
 
