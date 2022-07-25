@@ -40,6 +40,7 @@ func RunningShows() []string {
 
 	db.Where("start_date <= ? AND ? <= end_date", curr_time, curr_time).Find(&shows)
 
+
 	names := make([]string, len(shows))
 
 	f := "01-02-06"
