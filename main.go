@@ -20,8 +20,6 @@ func initDb() {
 	db.AutoMigrate(&data.Show{})
 	db.AutoMigrate(&data.User{})
 
-	fmt.Printf("Initialized tables")
-
 }
 
 

@@ -55,3 +55,29 @@ func RunningShows() []string {
 	return names
 
 }
+
+func AddCredits(num, ctype string, nc int) (error) {
+
+	db, err := Conn()
+	if err != nil {
+		return err
+	}
+
+	var u User
+	db.Where("phone = ?", num).Limit(1).Find(&u)
+
+
+	switch ctype {
+	case "PREVIEW":
+		u.PreviewCredits += uint64(nc)
+	case "WEEKEND":
+		u.WeekendCredits += uint64(nc)
+	case "WEEKDAY":
+		u.WeekdayCredits += uint64(nc)
+	}
+
+	db.Save(&u)
+
+	return nil
+
+}

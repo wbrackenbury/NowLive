@@ -9,6 +9,7 @@ import (
 	"encoding/json"
 	"encoding/xml"
 	"strings"
+	"strconv"
 
 	data "github.com/wbrackenbury/NowLive/m/v2/data"
 
@@ -144,8 +145,6 @@ func handleRunShows() (string, error) {
 
 	shows := data.RunningShows()
 
-	fmt.Println(shows)
-
 	if len(shows) < 1 {
 		return "No shows are currently playing.", nil
 	}
@@ -156,9 +155,41 @@ func handleRunShows() (string, error) {
 		ret_str += s
 	}
 
-	fmt.Println(ret_str)
-
 	return ret_str, nil
+
+}
+
+func handleAddCredits(orig_msg, num string) (string, error) {
+
+
+	vals := strings.Split(orig_msg, " ")
+	if len(vals) < 2 {
+
+		m, err := ioutil.ReadFile("messages/add_error")
+		return string(m), err
+	}
+
+	nc, err := strconv.Atoi(vals[1])
+	if err != nil {
+		m, err := ioutil.ReadFile("messages/add_error")
+		return string(m), err
+
+	}
+
+
+	ctype := vals[0]
+	err = data.AddCredits(num, ctype, nc)
+
+	if err != nil {
+		return "", err
+	}
+
+	m, err := ioutil.ReadFile("messages/add_success")
+	if err != nil {
+		return "Credits added", nil
+	}
+
+	return fmt.Sprintf(string(m), nc, ctype), nil
 
 }
 
@@ -167,11 +198,9 @@ func BasicResp(orig_msg, num string) (string, error) {
 
 	tr := &TwimlResp{}
 
-	fmt.Println(orig_msg)
+	switch  {
 
-	switch orig_msg {
-
-	case "CHECK":
+	case orig_msg == "CHECK":
 
 		s, err := handleCheck(num)
 		if err != nil {
@@ -180,9 +209,29 @@ func BasicResp(orig_msg, num string) (string, error) {
 
 		tr.Message = s
 
-	case "SHOWS":
+	case orig_msg == "SHOWS":
 
 		s, err := handleRunShows()
+		if err != nil {
+			panic(err)
+		}
+
+		tr.Message = s
+
+	case orig_msg == "ADD":
+
+		m, err := ioutil.ReadFile("messages/add")
+		if err != nil {
+			panic(err)
+		}
+
+		tr.Message = string(m)
+
+	case (strings.HasPrefix(orig_msg, "PREVIEW") ||
+		strings.HasPrefix(orig_msg, "WEEKDAY") ||
+		strings.HasPrefix(orig_msg, "WEEKEND")):
+
+		s, err := handleAddCredits(orig_msg, num)
 		if err != nil {
 			panic(err)
 		}
