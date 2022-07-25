@@ -10,8 +10,6 @@ import (
 )
 
 
-
-
 func initDb() {
 	db, err := data.Conn()
 	if err != nil {
@@ -21,6 +19,8 @@ func initDb() {
 	db.AutoMigrate(&data.Transact{})
 	db.AutoMigrate(&data.Show{})
 	db.AutoMigrate(&data.User{})
+
+	fmt.Printf("Initialized tables")
 
 }
 
@@ -202,6 +202,7 @@ func main() {
 
 	initDb()
 	exampData()
+
 
 	mux := http.NewServeMux()
 
