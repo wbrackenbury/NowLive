@@ -1,9 +1,20 @@
 package main
 
 import (
+	"net/url"
 	"strings"
 )
 
+//The below is a major improvement
+func ParseBody(req_body string) (url.Values, error) {
+
+	vals, err := url.ParseQuery(req_body)
+	if err != nil {
+		return nil, err
+	}
+
+	return vals, nil
+}
 
 // The below is pretty awful, and would likely fail under
 // even modest constraints (e.g., what if your message has an ampersand?)

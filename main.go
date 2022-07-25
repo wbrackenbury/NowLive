@@ -186,8 +186,14 @@ func SmsCallback(w http.ResponseWriter, r * http.Request) {
 		panic(err)
 	}
 
-	ret_msg, err := BasicResp(GetBody(string(orig_msg), false),
-		GetBody(string(orig_msg), true))
+	vals, err := ParseBody(string(orig_msg))
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Println(vals)
+
+	ret_msg, err := BasicResp(vals["Body"][0], vals["From"][0])
 
 	if err != nil {
 		panic(err)
