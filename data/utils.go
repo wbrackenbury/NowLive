@@ -96,17 +96,15 @@ func ExampData() {
 
 	sid := GetUUID()
 
-	start, _ := time.Parse("01-02-06", "3-05-22")
+	start, _ := time.Parse("01-02-06", "03-05-22")
 	end, _ := time.Parse("01-02-06", "11-21-22")
 
 	s := Show{
 		Id: sid,
-
 		Name: "Three Sisters",
 		PreviewPrice: 25.00,
 		WeekendPrice: 50.00,
 		WeekdayPrice: 40.00,
-
 		StartDate: datatypes.Date(start),
 		EndDate: datatypes.Date(end),
 

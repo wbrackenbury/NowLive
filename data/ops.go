@@ -38,8 +38,7 @@ func RunningShows() []string {
 	var shows[] Show
 	curr_time := datatypes.Date(time.Now())
 
-	db.Where("start_date <= ? AND ? <= end_date", curr_time, curr_time).Find(&shows)
-
+	db.Find(&shows, "start_date <= ? AND ? <= end_date", curr_time, curr_time)
 
 	names := make([]string, len(shows))
 
