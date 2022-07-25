@@ -171,7 +171,7 @@ func SmsCallback(w http.ResponseWriter, r * http.Request) {
 		panic(err)
 	}
 
-	ret_msg, err := BasicResp(string(orig_msg))
+	ret_msg, err := BasicResp(GetBody(string(orig_msg)))
 	if err != nil {
 		panic(err)
 	}
