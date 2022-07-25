@@ -176,7 +176,6 @@ func handleAddCredits(orig_msg, num string) (string, error) {
 
 	}
 
-
 	ctype := vals[0]
 	err = data.AddCredits(num, ctype, nc)
 
@@ -227,6 +226,10 @@ func BasicResp(orig_msg, num string) (string, error) {
 
 		tr.Message = string(m)
 
+	// The below is not best practice. Technically, we would
+	// want to store some state in the User table, and then
+	// check whether there's a live session for this part, but
+	// this is sufficient for a hobby project
 	case (strings.HasPrefix(orig_msg, "PREVIEW") ||
 		strings.HasPrefix(orig_msg, "WEEKDAY") ||
 		strings.HasPrefix(orig_msg, "WEEKEND")):

@@ -84,7 +84,7 @@ func ExampData() {
 
 		Name: "WB",
 		Email: "wb@example.com",
-		Phone: "+1***REMOVED***",
+		Phone: "+13333333333",
 		Address: "",
 
 		PreviewCredits: 2,

@@ -37,7 +37,7 @@ func HelloWord(w http.ResponseWriter, r * http.Request) {
 
 	var phone string
 	if len(phone_l) < 1 {
-		phone = "+1***REMOVED***"
+		phone = "+13333333333"
 	} else {
 		phone = phone_l[0]
 	}
@@ -57,7 +57,7 @@ func CallbackCheck(w http.ResponseWriter, r * http.Request) {
 
 	var phone string
 	if len(phone_l) < 1 {
-		phone = "+1***REMOVED***"
+		phone = "+13333333333"
 	} else {
 		phone = phone_l[0]
 	}

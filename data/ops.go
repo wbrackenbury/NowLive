@@ -66,17 +66,31 @@ func AddCredits(num, ctype string, nc int) (error) {
 	var u User
 	db.Where("phone = ?", num).Limit(1).Find(&u)
 
+	var ct uint8 = PREVIEW
 
 	switch ctype {
 	case "PREVIEW":
 		u.PreviewCredits += uint64(nc)
 	case "WEEKEND":
 		u.WeekendCredits += uint64(nc)
+		ct = WEEKEND
 	case "WEEKDAY":
 		u.WeekdayCredits += uint64(nc)
+		ct = WEEKDAY
 	}
 
 	db.Save(&u)
+
+	t := Transact{
+		Id: GetUUID(),
+
+		Credit: uint64(nc),
+		CreditType: ct,
+
+		UserId: u.Id,
+	}
+
+	db.Create(&t)
 
 	return nil
 
