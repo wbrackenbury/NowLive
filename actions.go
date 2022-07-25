@@ -122,6 +122,43 @@ func SendHello(num string) (error) {
 }
 
 
+func handleCheck(num string) (string, error) {
+
+	m, err := ioutil.ReadFile("messages/getcredit")
+	if err != nil {
+		return "", nil
+	}
+
+	prev, weekd, weekend := data.NumCredits(num)
+
+	return fmt.Sprintf(string(m), prev, weekd, weekend), nil
+
+}
+
+func handleRunShows() (string, error) {
+
+	m, err := ioutil.ReadFile("messages/shows")
+	if err != nil {
+		return "", nil
+	}
+
+	shows := data.RunningShows()
+
+	if len(shows) < 1 {
+		return "No shows are currently playing.", nil
+	}
+
+	ret_str := string(m)
+
+	for _, s := range shows {
+		ret_str += s
+	}
+
+	return ret_str, nil
+
+}
+
+
 func BasicResp(orig_msg, num string) (string, error) {
 
 	tr := &TwimlResp{}
@@ -130,16 +167,24 @@ func BasicResp(orig_msg, num string) (string, error) {
 
 	switch orig_msg {
 
-	case "check":
+	case "CHECK":
 
-		m, err := ioutil.ReadFile("messages/getcredit")
+		s, err := handleCheck(num)
 		if err != nil {
 			panic(err)
 		}
 
-		prev, weekd, weekend := data.NumCredits(num)
+		tr.Message = s
 
-		tr.Message = fmt.Sprintf(string(m), prev, weekd, weekend)
+	case "SHOWS":
+
+		s, err := handleRunShows()
+		if err != nil {
+			panic(err)
+		}
+
+		tr.Message = s
+
 	default:
 
 		m, err := ioutil.ReadFile("messages/help")

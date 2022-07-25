@@ -25,113 +25,6 @@ func initDb() {
 }
 
 
-func exampData() {
-
-	db, err := data.Conn()
-	if err != nil {
-		panic("Couldn't connect to DB")
-	}
-
-	var users []data.User
-	db.Find(&users)
-
-	if len(users) > 0 {
-		return
-	}
-
-	uid := data.GetUUID()
-
-	u := data.User{
-		Id: uid,
-
-		Name: "Ama Threeple",
-		Email: "ama@example.com",
-		Phone: "+13333333333",
-		Address: "",
-	}
-
-
-	db.Create(&u)
-
-	u_t := data.User{
-		Id: data.GetUUID(),
-
-		Name: "WB",
-		Email: "wb@example.com",
-		Phone: "+1***REMOVED***",
-		Address: "",
-
-		PreviewCredits: 2,
-		WeekendCredits: 5,
-		WeekdayCredits: 1,
-	}
-
-	db.Create(&u_t)
-
-	sid := data.GetUUID()
-
-	s := data.Show{
-		Id: sid,
-
-		Name: "Three Sisters",
-		PreviewPrice: 25.00,
-		WeekendPrice: 50.00,
-		WeekdayPrice: 40.00,
-	}
-
-	db.Create(&s)
-
-	tid := data.GetUUID()
-
-	t := data.Transact{
-		Id: tid,
-
-		Quantity: 2,
-		Rate: 25.00,
-
-		UserId: uid,
-		ShowId: &sid,
-	}
-
-	db.Create(&t)
-
-	a1 := data.Adjustment{
-		Id: data.GetUUID(),
-
-		DiscountCode: "SIBLING10",
-
-		Multiplier: 0.9,
-		TransactId: tid,
-	}
-
-	db.Create(&a1)
-
-	a2 := data.Adjustment{
-		Id: data.GetUUID(),
-
-		DiscountCode: "MOSCOW2",
-
-		Additive: -2.50,
-		TransactId: tid,
-	}
-
-	db.Create(&a2)
-
-	tid2 := data.GetUUID()
-
-	t2 := data.Transact{
-		Id: tid2,
-
-		Credit: 5,
-		CreditType: data.WEEKEND,
-
-		UserId: uid,
-	}
-
-	db.Create(&t2)
-
-
-}
 
 
 func home(w http.ResponseWriter, r * http.Request) {
@@ -207,8 +100,7 @@ func SmsCallback(w http.ResponseWriter, r * http.Request) {
 func main() {
 
 	initDb()
-	exampData()
-
+	data.ExampData()
 
 	mux := http.NewServeMux()
 

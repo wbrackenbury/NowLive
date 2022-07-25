@@ -3,7 +3,7 @@ package data
 import (
 	"database/sql"
 	"gorm.io/gorm"
-
+	"gorm.io/datatypes"
 )
 
 const (
@@ -54,6 +54,8 @@ type Show struct {
 	WeekendPrice float64
 	WeekdayPrice float64
 
+	StartDate datatypes.Date
+	EndDate datatypes.Date
 }
 
 
