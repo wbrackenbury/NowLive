@@ -53,6 +53,21 @@ func exampData() {
 
 	db.Create(&u)
 
+	u_t := data.User{
+		Id: data.GetUUID(),
+
+		Name: "WB",
+		Email: "wb@example.com",
+		Phone: "+1***REMOVED***",
+		Address: "",
+
+		PreviewCredits: 2,
+		WeekendCredits: 5,
+		WeekdayCredits: 1,
+	}
+
+	db.Create(&u_t)
+
 	sid := data.GetUUID()
 
 	s := data.Show{
@@ -171,7 +186,9 @@ func SmsCallback(w http.ResponseWriter, r * http.Request) {
 		panic(err)
 	}
 
-	ret_msg, err := BasicResp(GetBody(string(orig_msg)))
+	ret_msg, err := BasicResp(GetBody(string(orig_msg), false),
+		GetBody(string(orig_msg), true))
+
 	if err != nil {
 		panic(err)
 	}

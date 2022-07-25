@@ -9,6 +9,9 @@ import (
 	"encoding/json"
 	"encoding/xml"
 	"strings"
+
+	data "github.com/wbrackenbury/NowLive/m/v2/data"
+
 )
 
 
@@ -119,7 +122,7 @@ func SendHello(num string) (error) {
 }
 
 
-func BasicResp(orig_msg string) (string, error) {
+func BasicResp(orig_msg, num string) (string, error) {
 
 	tr := &TwimlResp{}
 
@@ -127,12 +130,24 @@ func BasicResp(orig_msg string) (string, error) {
 
 	switch orig_msg {
 
-	case "hello":
-		tr.Message = "hi"
-	case "bye":
-		tr.Message = "bye"
+	case "check":
+
+		m, err := ioutil.ReadFile("messages/getcredit")
+		if err != nil {
+			panic(err)
+		}
+
+		prev, weekd, weekend := data.NumCredits(num)
+
+		tr.Message = fmt.Sprintf(string(m), prev, weekd, weekend)
 	default:
-		tr.Message = "No message"
+
+		m, err := ioutil.ReadFile("messages/help")
+		if err != nil {
+			panic(err)
+		}
+
+		tr.Message = string(m)
 	}
 
 	s, err := xml.Marshal(tr)

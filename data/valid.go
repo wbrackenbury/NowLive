@@ -1,6 +1,5 @@
 package data
 
-
 func hasCredits(uid string, credit_val uint64, credit_type uint8) (bool) {
 
 	db, err := Conn()
