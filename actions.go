@@ -123,6 +123,8 @@ func BasicResp(orig_msg string) (string, error) {
 
 	tr := &TwimlResp{}
 
+	fmt.Println(orig_msg)
+
 	switch orig_msg {
 
 	case "hello":
