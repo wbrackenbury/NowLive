@@ -4,6 +4,7 @@ import (
 	"os"
 	"fmt"
 	"net/http"
+	"io/ioutil"
 
 	data "github.com/wbrackenbury/NowLive/m/v2/data"
 )
@@ -144,6 +145,41 @@ func HelloWord(w http.ResponseWriter, r * http.Request) {
 }
 
 
+func CallbackCheck(w http.ResponseWriter, r * http.Request) {
+
+	phone_l := r.URL.Query()["phone"]
+
+	var phone string
+	if len(phone_l) < 1 {
+		phone = "+1***REMOVED***"
+	} else {
+		phone = phone_l[0]
+	}
+
+	_, err := Send(phone, "Do you want a callback?", true)
+
+	if err != nil {
+		panic(err)
+	}
+
+}
+
+func SmsCallback(w http.ResponseWriter, r * http.Request) {
+
+	orig_msg, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		panic(err)
+	}
+
+	ret_msg, err := BasicResp(string(orig_msg))
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Fprintf(w, ret_msg)
+}
+
+
 
 func main() {
 
@@ -154,6 +190,8 @@ func main() {
 
 	mux.HandleFunc("/", home)
 	mux.HandleFunc("/hello", HelloWord)
+	mux.HandleFunc("/callback", CallbackCheck)
+	mux.HandleFunc("/sms", SmsCallback)
 
 	port := os.Getenv("PORT")
 	if (port == "") {

@@ -7,6 +7,7 @@ import (
 	"net/url"
 	"io/ioutil"
 	"encoding/json"
+	"encoding/xml"
 	"strings"
 )
 
@@ -20,6 +21,11 @@ type TwilInfo struct{
 	AuthToken string `json:"auth_token"`
 	TwilPhone string `json:"twil_phone"`
 
+}
+
+type TwimlResp struct {
+	XMLName xml.Name `xml:"Response"`
+	Message string `xml:"Message"`
 }
 
 
@@ -67,7 +73,7 @@ func sendUrl(tf * TwilInfo) string {
 	return UrlBase + tf.AccountSid + "/Messages.json"
 }
 
-func Send(num, message string) (*http.Response, error) {
+func Send(num, message string, callback bool) (*http.Response, error) {
 
 	tf, err := loadTwilInfo()
 	if err != nil {
@@ -78,6 +84,11 @@ func Send(num, message string) (*http.Response, error) {
 	v.Set("To", num)
 	v.Set("From", tf.TwilPhone)
 	v.Set("Body", message)
+
+	if callback {
+		v.Set("StatusCallback", "https://theatre-now-live.herokuapp.com/sms")
+	}
+
 	rb := *strings.NewReader(v.Encode())
 
 	fmt.Printf("Rb: %s\n", v)
@@ -103,6 +114,31 @@ func Send(num, message string) (*http.Response, error) {
 
 func SendHello(num string) (error) {
 
-	_, err := Send(num, "Hello!")
+	_, err := Send(num, "Hello!", false)
 	return err
+}
+
+
+func BasicResp(orig_msg string) (string, error) {
+
+	tr := &TwimlResp{}
+
+	switch orig_msg {
+
+	case "hello":
+		tr.Message = "hi"
+	case "bye":
+		tr.Message = "bye"
+	default:
+		tr.Message = "No message"
+	}
+
+	s, err := xml.Marshal(tr)
+	if err != nil {
+		return "", err
+	}
+
+	return xml.Header + string(s), nil
+
+
 }
